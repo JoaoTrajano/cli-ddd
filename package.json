@@ -1,6 +1,6 @@
 {
   "name": "cli-ddd-jt",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simple CLI that automates common tasks for creating modules using DDD",
   "main": "index.js",
   "type": "module",
