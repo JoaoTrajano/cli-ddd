@@ -1,0 +1,24 @@
+{
+  "name": "cli-ddd",
+  "version": "1.0.1",
+  "description": "Simple CLI that automates common tasks for creating modules using DDD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/meu-cli-ddd"
+  },
+  "keywords": [
+    "cli",
+    "nestjs",
+    "ddd"
+  ],
+  "author": "JoaoTrajano",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^12.0.0",
+    "winston": "^3.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.28"
+  }
+}
