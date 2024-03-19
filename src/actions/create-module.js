@@ -3,7 +3,9 @@ import path from "node:path";
 
 import { firstLetterCapitalized } from "../helpers/first-letter-capitalized.js";
 
-export const createModule = async (name) => {
+import { exec } from "child_process";
+
+export const createModule = async (name, option) => {
   const nameCapitalized = firstLetterCapitalized(name);
 
   const moduloPath = path.join(process.cwd(), "src", "modules", name);
@@ -100,20 +102,30 @@ export const createModule = async (name) => {
 ;`
   );
 
-  fs.writeFileSync(
-    path.join(moduloPath, `${name}.module.ts`),
-    `import { Module } from '@nestjs/common';
-import { ${nameCapitalized}UseCase } from './application/usecases/${name}.usecase.ts';
-import { ${nameCapitalized} } from './domain/entities/${name}';
-import { Repository${nameCapitalized} } from './infrastructure/adapters/${name}.repository.ts';
+  if (option === "y") {
+    exec(`nest -g module ${moduloPath} `, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Erro ao executar o comando: ${error}`);
+        return;
+      }
+      console.log(`Saída do comando: ${stdout}`);
+    });
+  }
 
-@Module({
-  imports: [],
-  controllers: [],
-  providers: [${nameCapitalized}UseCase, ${nameCapitalized}, Repository${nameCapitalized}],
-})
-export class ${nameCapitalized}Module {}`
-  );
+  //   fs.writeFileSync(
+  //     path.join(moduloPath, `${name}.module.ts`),
+  //     `import { Module } from '@nestjs/common';
+  // import { ${nameCapitalized}UseCase } from './application/usecases/${name}.usecase.ts';
+  // import { ${nameCapitalized} } from './domain/entities/${name}';
+  // import { Repository${nameCapitalized} } from './infrastructure/adapters/${name}.repository.ts';
+
+  // @Module({
+  //   imports: [],
+  //   controllers: [],
+  //   providers: [${nameCapitalized}UseCase, ${nameCapitalized}, Repository${nameCapitalized}],
+  // })
+  // export class ${nameCapitalized}Module {}`
+  //   );
 
   // const logger = winston.createLogger({
   //   format: winston.format.combine(

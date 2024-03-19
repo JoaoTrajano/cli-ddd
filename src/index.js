@@ -16,10 +16,16 @@ async function main() {
     cancel("Operation cancelled");
     return process.exit(0);
   }
+
+  const usingNest = await text({
+    message: "You using Nest.js?",
+    placeholder: "y/n",
+  });
+
   const s = spinner();
 
   s.start("Creating module...");
-  await createModule(name);
+  await createModule(name, usingNest);
   s.stop("Module created");
 
   outro("Module created successfully!");
