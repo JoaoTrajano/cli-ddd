@@ -2,27 +2,77 @@ const fs = require("fs");
 const path = require("path");
 const winston = require("winston");
 
+const firstLetterCapitalized = require("../helpers/first-letter-capitalized");
+
 function createModule(name) {
+  const nameCapitalized = firstLetterCapitalized(name);
+
   const moduloPath = path.join(process.cwd(), "src", "modules", name);
 
   fs.mkdirSync(moduloPath, { recursive: true });
   fs.mkdirSync(path.join(moduloPath, "application"), { recursive: true });
+  fs.mkdirSync(path.join(moduloPath, "presentation"), { recursive: true });
+  fs.mkdirSync(path.join(moduloPath, "presentation", "controller"), {
+    recursive: true,
+  });
+  fs.mkdirSync(path.join(moduloPath, "presentation", "presenter"), {
+    recursive: true,
+  });
   fs.mkdirSync(path.join(moduloPath, "application", "usecases"), {
     recursive: true,
   });
-  fs.mkdirSync(path.join(moduloPath, "application", "mappers"), {
+  fs.mkdirSync(path.join(moduloPath, "application", "services"), {
     recursive: true,
   });
-  fs.mkdirSync(path.join(moduloPath, "domain", "entities"), {
+  fs.mkdirSync(path.join(moduloPath, "domain", "entities", "__tests__"), {
     recursive: true,
   });
   fs.mkdirSync(path.join(moduloPath, "infrastructure", "adapters"), {
     recursive: true,
   });
+  fs.mkdirSync(path.join(moduloPath, "infrastructure", "mappers"), {
+    recursive: true,
+  });
+
+  fs.writeFileSync(
+    path.join(
+      moduloPath,
+      "presentation",
+      "controller",
+      `${name}.controller.ts`
+    ),
+    `export class ${nameCapitalized}Controller {
+  constructor() {}
+ 
+}`
+  );
+
+  fs.writeFileSync(
+    path.join(moduloPath, "presentation", "presenter", `${name}.presenter.ts`),
+    `export class ${nameCapitalized}Presenter {
+  constructor() {}
+ 
+}`
+  );
+
+  fs.writeFileSync(
+    path.join(moduloPath, "application", "services", `${name}.service.ts`),
+    `export class ${nameCapitalized}Service {
+  constructor() {}
+ 
+}`
+  );
+
+  fs.writeFileSync(
+    path.join(moduloPath, "domain", "entities", "__tests__", `${name}.spec.ts`),
+    `describe('${nameCapitalized}Entity test', () => {
+  beforeEach(() => {})
+})`
+  );
 
   fs.writeFileSync(
     path.join(moduloPath, "application", "usecases", `${name}.usecase.ts`),
-    `export class ${name}UseCase {
+    `export class ${nameCapitalized}UseCase {
   constructor() {}
 
   async execute() {}
@@ -31,7 +81,7 @@ function createModule(name) {
 
   fs.writeFileSync(
     path.join(moduloPath, "domain", "entities", `${name}.entity.ts`),
-    `export class ${name} {
+    `export class ${nameCapitalized}Entity {
   constructor() {}
 }
 
@@ -45,25 +95,25 @@ function createModule(name) {
       "adapters",
       `${name}.repository.ts`
     ),
-    `export class Repository${name} {
+    `export class Repository${nameCapitalized} {
 }
 
 ;`
   );
 
   fs.writeFileSync(
-    path.join(moduloPath, "index.ts"),
+    path.join(moduloPath, `${name}.module.ts`),
     `import { Module } from '@nestjs/common';
-import { ${name}UseCase } from './application/usecases/${name}.usecase.ts';
-import { ${name} } from './domain/entities/${name}';
-import { Repository${name} } from './infrastructure/adapters/${name}.repository.ts';
+import { ${nameCapitalized}UseCase } from './application/usecases/${name}.usecase.ts';
+import { ${nameCapitalized} } from './domain/entities/${name}';
+import { Repository${nameCapitalized} } from './infrastructure/adapters/${name}.repository.ts';
 
 @Module({
   imports: [],
   controllers: [],
-  providers: [${name}UseCase, ${name}, Repository${name}],
+  providers: [${nameCapitalized}UseCase, ${nameCapitalized}, Repository${nameCapitalized}],
 })
-export class ${name}Module {}`
+export class ${nameCapitalized}Module {}`
   );
 
   const logger = winston.createLogger({
@@ -76,8 +126,8 @@ export class ${name}Module {}`
     transports: [new winston.transports.Console()],
   });
 
-  logger.info(`Module ${name} created with success!`, {
-    name,
+  logger.info(`Module ${nameCapitalized} created with success!`, {
+    nameCapitalized,
   });
 }
 
