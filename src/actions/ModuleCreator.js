@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
-import { exec } from "child_process";
+import { exec } from "node:child_process";
 import { firstLetterCapitalized } from "../helpers/first-letter-capitalized.js";
 
 class ModuleCreator {
@@ -13,7 +13,7 @@ class ModuleCreator {
   async createModule() {
     try {
       if (!this.name) {
-        throw new Error("O nome do módulo é obrigatório.");
+        throw new Error("Module name is required.");
       }
 
       const nameCapitalized = firstLetterCapitalized(this.name);
@@ -21,12 +21,8 @@ class ModuleCreator {
 
       await this.createModuleDirectories(moduloPath);
       await this.createModuleFiles(moduloPath, nameCapitalized, this.name);
-
-      if (this.options === "y") {
-        this.generateNestModule(this.name);
-      }
     } catch (err) {
-      console.error("Ocorreu um erro ao criar o módulo:", err);
+      console.error("An error occurred while creating the module:", err);
     }
   }
 
@@ -51,6 +47,64 @@ class ModuleCreator {
   }
 
   async createModuleFiles(moduloPath, nameCapitalized, name) {
+    if (this.options === "y") {
+      const files = [
+        {
+          path: path.join(
+            moduloPath,
+            "presentation",
+            "presenter",
+            `${name}.presenter.ts`
+          ),
+          content: `export class ${nameCapitalized}Presenter {\n  constructor() {}\n}`,
+        },
+        {
+          path: path.join(
+            moduloPath,
+            "domain",
+            "entities",
+            "__tests__",
+            `${name}.spec.ts`
+          ),
+          content: `describe('${nameCapitalized}Entity test', () => {\n  beforeEach(() => {})\n})`,
+        },
+        {
+          path: path.join(
+            moduloPath,
+            "application",
+            "usecases",
+            `${name}.usecase.ts`
+          ),
+          content: `export class ${nameCapitalized}UseCase {\n  constructor() {}\n\n  async execute() {}\n}`,
+        },
+        {
+          path: path.join(
+            moduloPath,
+            "domain",
+            "entities",
+            `${name}.entity.ts`
+          ),
+          content: `export class ${nameCapitalized}Entity {\n  constructor() {}\n}`,
+        },
+        {
+          path: path.join(
+            moduloPath,
+            "infrastructure",
+            "adapters",
+            `${name}.repository.ts`
+          ),
+          content: `export class Repository${nameCapitalized} {\n}`,
+        },
+      ];
+
+      for (const file of files) {
+        await promisify(fs.writeFile)(file.path, file.content);
+      }
+
+      this.nestGenerateFiles();
+      return;
+    }
+
     const files = [
       {
         path: path.join(
@@ -119,12 +173,40 @@ class ModuleCreator {
   }
 
   generateNestModule(name) {
-    exec(`nest g module modules/${name} `, (error, stdout) => {
+    exec(`nest g module modules/${name} --flat`, (error, stdout) => {
       if (error) {
-        console.error(`Erro ao executar o comando: ${error}`);
+        console.error(`Error executing command: ${error}`);
         return;
       }
     });
+  }
+  generateNestService(name) {
+    exec(
+      `nest g service modules/${name}/application/services/${name} --flat `,
+      (error, stdout) => {
+        if (error) {
+          console.error(`Error executing command: ${error}`);
+          return;
+        }
+      }
+    );
+  }
+  generateNestController(name) {
+    exec(
+      `nest g controller modules/${name}/presentation/controller/${name}  --flat`,
+      (error, stdout) => {
+        if (error) {
+          console.error(`Error executing command: ${error}`);
+          return;
+        }
+      }
+    );
+  }
+
+  nestGenerateFiles() {
+    this.generateNestModule(this.name);
+    this.generateNestService(this.name);
+    this.generateNestController(this.name);
   }
 }
 
