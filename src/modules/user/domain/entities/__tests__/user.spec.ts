@@ -1,0 +1,3 @@
+describe('UserEntity test', () => {
+  beforeEach(() => {})
+})

@@ -26,8 +26,7 @@ async function main() {
 
   const s = spinner();
   s.start("Creating module...");
-  createModule(name);
-  await sleep(3000);
+  await createModule(name);
 
   s.stop("Module created");
 

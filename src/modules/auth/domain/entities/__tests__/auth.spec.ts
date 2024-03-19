@@ -1,0 +1,3 @@
+describe('AuthEntity test', () => {
+  beforeEach(() => {})
+})

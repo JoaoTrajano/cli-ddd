@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { firstLetterCapitalized } from "../helpers/first-letter-capitalized.js";
 
-export const createModule = (name) => {
+export const createModule = async (name) => {
   const nameCapitalized = firstLetterCapitalized(name);
 
   const moduloPath = path.join(process.cwd(), "src", "modules", name);
