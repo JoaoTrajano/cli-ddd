@@ -1,5 +1,5 @@
 {
-  "name": "cli-ddd",
+  "name": "cli-ddd-jt",
   "version": "1.0.3",
   "description": "Simple CLI that automates common tasks for creating modules using DDD",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "start": "node ./bin/meu-cli-ddd"
   },
   "bin": {
-    "jt": "./bin/index.js"
+    "jt": "./bin/src/index.js"
   },
   "keywords": [
     "cli",
