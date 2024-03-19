@@ -9,7 +9,7 @@
     "start": "node ./bin/meu-cli-ddd"
   },
   "bin": {
-    "jt": "./bin/src/index.js"
+    "jt": "./src/index.js"
   },
   "keywords": [
     "cli",
