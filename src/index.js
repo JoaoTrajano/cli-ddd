@@ -1,8 +1,6 @@
 import {
   intro,
   outro,
-  confirm,
-  select,
   spinner,
   isCancel,
   cancel,
@@ -23,11 +21,10 @@ async function main() {
     cancel("Operation cancelled");
     return process.exit(0);
   }
-
   const s = spinner();
+
   s.start("Creating module...");
   await createModule(name);
-
   s.stop("Module created");
 
   outro("Module created successfully!");
