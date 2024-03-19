@@ -2,7 +2,7 @@
 
 import { intro, outro, spinner, isCancel, cancel, text } from "@clack/prompts";
 import color from "picocolors";
-import { createModule } from "./actions/create-module.js";
+import ModuleCreator from "./actions/ModuleCreator.js";
 
 async function main() {
   intro(color.inverse("Create module"));
@@ -25,7 +25,7 @@ async function main() {
   const s = spinner();
 
   s.start("Creating module...");
-  await createModule(name, usingNest);
+  new ModuleCreator(name, usingNest).createModule();
   s.stop("Module created");
 
   outro("Module created successfully!");
