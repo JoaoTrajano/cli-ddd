@@ -1,10 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const winston = require("winston");
+import fs from "node:fs";
+import path from "node:path";
 
-const firstLetterCapitalized = require("../helpers/first-letter-capitalized");
+import { firstLetterCapitalized } from "../helpers/first-letter-capitalized.js";
 
-function createModule(name) {
+export const createModule = (name) => {
   const nameCapitalized = firstLetterCapitalized(name);
 
   const moduloPath = path.join(process.cwd(), "src", "modules", name);
@@ -116,19 +115,17 @@ import { Repository${nameCapitalized} } from './infrastructure/adapters/${name}.
 export class ${nameCapitalized}Module {}`
   );
 
-  const logger = winston.createLogger({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.printf(({ level, message }) => {
-        return `[${level}] ${message}`;
-      })
-    ),
-    transports: [new winston.transports.Console()],
-  });
+  // const logger = winston.createLogger({
+  //   format: winston.format.combine(
+  //     winston.format.colorize(),
+  //     winston.format.printf(({ level, message }) => {
+  //       return `[${level}] ${message}`;
+  //     })
+  //   ),
+  //   transports: [new winston.transports.Console()],
+  // });
 
-  logger.info(`Module ${nameCapitalized} created with success!`, {
-    nameCapitalized,
-  });
-}
-
-module.exports = { createModule };
+  // logger.info(`Module ${nameCapitalized} created with success!`, {
+  //   nameCapitalized,
+  // });
+};

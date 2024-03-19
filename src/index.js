@@ -1,19 +1,37 @@
-#!/usr/bin/env node
-const { program } = require("commander");
-const { createModule } = require("./actions/create-module");
+import {
+  intro,
+  outro,
+  confirm,
+  select,
+  spinner,
+  isCancel,
+  cancel,
+  text,
+} from "@clack/prompts";
+import color from "picocolors";
+import { createModule } from "./actions/create-module.js";
 
-program
-  .version("1.0.0")
-  .description(
-    "Simple CLI that automates common tasks for creating modules using DDD"
-  );
+async function main() {
+  intro(color.inverse("Create module"));
 
-program
-  .command("create-module <name>")
-  .alias("cm")
-  .description("Create the new module using DDD")
-  .action((name) => {
-    createModule(name);
+  const name = await text({
+    message: "What name the module",
+    placeholder: "user",
   });
 
-program.parse(process.argv);
+  if (isCancel(name)) {
+    cancel("Operation cancelled");
+    return process.exit(0);
+  }
+
+  const s = spinner();
+  s.start("Creating module...");
+  createModule(name);
+  await sleep(3000);
+
+  s.stop("Module created");
+
+  outro("Module created successfully!");
+}
+
+main().catch(console.error);

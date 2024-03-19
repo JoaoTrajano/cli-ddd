@@ -1,4 +1,4 @@
-function firstLetterCapitalized(string) {
+export const firstLetterCapitalized = (string) => {
   if (!string) return "";
 
   const firstLetter = string.charAt(0);
@@ -8,6 +8,4 @@ function firstLetterCapitalized(string) {
   const capitalizedWord = firstLetterCap + remainingLetters;
 
   return capitalizedWord;
-}
-
-module.exports = firstLetterCapitalized;
+};
