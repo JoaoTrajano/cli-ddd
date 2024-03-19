@@ -173,7 +173,7 @@ class ModuleCreator {
   }
 
   generateNestModule(name) {
-    exec(`nest g module modules/${name} --flat`, (error, stdout) => {
+    exec(`nest g module modules/${name}`, (error, stdout) => {
       if (error) {
         console.error(`Error executing command: ${error}`);
         return;
