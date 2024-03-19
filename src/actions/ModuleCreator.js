@@ -124,7 +124,6 @@ class ModuleCreator {
         console.error(`Erro ao executar o comando: ${error}`);
         return;
       }
-      console.log(`Saída do comando: ${stdout}`);
     });
   }
 }
