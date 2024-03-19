@@ -1,11 +1,6 @@
-import {
-  intro,
-  outro,
-  spinner,
-  isCancel,
-  cancel,
-  text,
-} from "@clack/prompts";
+#!/usr/bin/env node
+
+import { intro, outro, spinner, isCancel, cancel, text } from "@clack/prompts";
 import color from "picocolors";
 import { createModule } from "./actions/create-module.js";
 
